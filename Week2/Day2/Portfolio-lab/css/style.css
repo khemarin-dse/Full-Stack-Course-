@@ -1,0 +1,164 @@
+/* 1. Global Styles (Element Selectors) */
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  color: #333333;
+  background-color: #f9f9f9;
+  margin: 0;
+}
+
+/* 2. Header & Navigation (Class Selectors) */
+.header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-list{
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.nav-link{
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.nav-link:hover{
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+/* 3. Hero Sections (ID Selector) */
+#hero{
+  background-color: white;
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.hero{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#hero-title{
+  font-size: 40px;
+  color: #111827;
+}
+
+.hero-subtitle{
+  font-size: 1.2rem;
+  color: #6b7280;
+}
+
+/* 4. Images */
+img{
+  border: 5px solid #2563eb;
+  margin-top: 20px;
+}
+
+/* 5. Sections */
+section{
+  padding: 40px 20px;
+}
+
+h2{
+  border-bottom: 2px solid #2563eb;
+  display: inline-block;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+}
+
+/* 6. Form Basics */
+.form-group label{
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input, textarea{
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+}
+
+/* 7. Buttons (Class Selectors) */
+.btn-primary{
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-secondary{
+  background-color: #e5e7eb;
+  color: #374151;
+  border: none;
+}
+
+/* FIXED: Perfect boxes - all same size, properly aligned */
+.skills-list{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.skills-list p{
+  background-color: white;
+  margin: 0;
+  padding: 12px 20px;
+  border: 1px solid black;
+  min-width: 150px;
+  text-align: center;
+}
+
+/* Fixed for About section - keep original style but consistent */
+.about .skills-list{
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.about .skills-list p{
+  min-width: auto;
+  text-align: left;
+  padding: 10px 15px;
+  width: auto;
+}
+
+#menu-toggle{
+  display: none;
+}
+
+.menu-icon{
+  display: none;
+}
+
+@media (max-width: 768px){
+  .menu-icon{
+    display: block;
+  }
+  .nav-list{
+    flex-direction: column;
+  }
+  .footer{
+    flex-direction: column;
+  }
+}
+
+.footer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
