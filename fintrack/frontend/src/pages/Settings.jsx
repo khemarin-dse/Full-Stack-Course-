@@ -205,10 +205,10 @@ export default function Settings() {
               </div>
             </div>
 
-            <hr className="border-[#E4E2F0]" />
+            {/* <hr className="border-[#E4E2F0]" /> */}
 
             {/* Language */}
-            <div className="flex justify-between items-center">
+            {/* <div className="flex justify-between items-center">
               <div>
                 <div className="text-[13px]">Language</div>
                 <div className="text-[11px] text-[#6B6882]">App display language</div>
@@ -217,12 +217,12 @@ export default function Settings() {
                 <option>English</option>
                 <option>Khmer</option>
               </select>
-            </div>
+            </div> */}
 
-            <hr className="border-[#E4E2F0]" />
+            {/* <hr className="border-[#E4E2F0]" /> */}
 
             {/* Theme */}
-            <div className="flex justify-between items-center">
+            {/* <div className="flex justify-between items-center">
               <div>
                 <div className="text-[13px]">Theme</div>
                 <div className="text-[11px] text-[#6B6882]">Light or dark mode</div>
@@ -235,7 +235,7 @@ export default function Settings() {
                   </button>
                 ))}
               </div>
-            </div>
+            </div> */}
           </Card>
 
           {/* Notifications */}
