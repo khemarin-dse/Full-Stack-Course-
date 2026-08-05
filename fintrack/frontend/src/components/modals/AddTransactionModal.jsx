@@ -24,7 +24,7 @@ export default function AddTransactionModal({ open, onClose }) {
   const hint = type === 'expense'
     ? `This will be deducted from your <strong>${form.category}</strong> budget and added to your expenses.`
     : form.goal_id
-      ? `This will increase your income and be tracked toward your selected goal.`
+      ? `This will be moved out of your available savings and tracked toward your selected goal. Your income won't change.`
       : `This will be added to your total income.`
 
   const handleSubmit = async (e) => {
@@ -43,7 +43,7 @@ export default function AddTransactionModal({ open, onClose }) {
         date: form.date,
         note: form.note,
       })
-      toast(type === 'expense' ? 'Expense added!' : 'Income added!')
+      toast(type === 'expense' ? 'Expense added!' : form.goal_id ? 'Added to goal!' : 'Income added!')
       setForm({
         description: '',
         amount: '',
@@ -163,7 +163,7 @@ export default function AddTransactionModal({ open, onClose }) {
             variant={type === 'income' ? 'green' : 'primary'}
             className="flex-1 justify-center"
           >
-            {loading ? 'Saving...' : type === 'expense' ? 'Add expense' : 'Add income'}
+            {loading ? 'Saving...' : type === 'expense' ? 'Add expense' : form.goal_id ? 'Add to goal' : 'Add income'}
           </Btn>
         </div>
       </form>

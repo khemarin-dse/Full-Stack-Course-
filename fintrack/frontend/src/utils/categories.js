@@ -39,6 +39,18 @@ export function getCategoryMeta(name, type = 'expense') {
   return list.find(c => c.value === name) || { icon: 'ti-coin', bg: '#F0EFF8', color: '#6B6882' }
 }
 
+// Same icon as getCategoryMeta, but the box color is always just one of two
+// colors — green for income, orange for expenses — instead of a different
+// color per category. Used for transaction list rows.
+export function getTxMeta(name, type = 'expense') {
+  const list = type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES
+  const entry = list.find(c => c.value === name)
+  const icon = entry ? entry.icon : 'ti-coin'
+  return type === 'income'
+    ? { icon, bg: '#E1F5EE', color: '#0F6E56' }
+    : { icon, bg: '#FAEEDA', color: '#854F0B' }
+}
+
 export function getGoalMeta(type) {
   return GOAL_TYPES.find(g => g.value === type) || GOAL_TYPES[GOAL_TYPES.length - 1]
 }

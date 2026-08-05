@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { FinanceProvider } from './context/FinanceContext'
 import { ToastProvider } from './context/ToastContext'
+import { CurrencyProvider } from './context/CurrencyContext'
 import Layout from './components/layout/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
@@ -46,9 +47,11 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <ToastProvider>
-          <FinanceProvider>
-            <AppRoutes />
-          </FinanceProvider>
+          <CurrencyProvider>
+            <FinanceProvider>
+              <AppRoutes />
+            </FinanceProvider>
+          </CurrencyProvider>
         </ToastProvider>
       </AuthProvider>
     </BrowserRouter>

@@ -48,9 +48,15 @@ class TransactionController extends Controller
 
         $userId = $request->user()->id;
 
+        // A transaction linked to a goal represents money being moved into
+        // that goal, not new income — even if the "Income / Savings" tab
+        // was used to create it. Record it as an expense so it comes out of
+        // the dashboard's available savings instead of inflating income.
+        $type = ($request->type === 'income' && $request->goal_id) ? 'expense' : $request->type;
+
         $transaction = Transaction::create([
             'user_id'     => $userId,
-            'type'        => $request->type,
+            'type'        => $type,
             'description' => $request->description,
             'amount'      => $request->amount,
             'category'    => $request->category,
@@ -60,7 +66,7 @@ class TransactionController extends Controller
         ]);
 
         // If linked to a goal, add to goal saved amount and record history
-        if ($request->type === 'income' && $request->goal_id) {
+        if ($request->goal_id) {
             $goal = Goal::where('id', $request->goal_id)
                         ->where('user_id', $userId)
                         ->first();

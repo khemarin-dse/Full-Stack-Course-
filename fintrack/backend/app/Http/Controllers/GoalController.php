@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Goal;
 use App\Models\GoalHistory;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class GoalController extends Controller
@@ -121,6 +122,21 @@ class GoalController extends Controller
             'description' => $request->note ?? 'Savings deposit',
             'source'      => 'manual',
             'date'        => $request->date,
+        ]);
+
+        // This money is being moved out of the user's existing savings
+        // (it was already counted as income earlier), not new income.
+        // Record it as an expense-type transaction so it lowers the
+        // dashboard's "savings" (income - expense) without touching income.
+        Transaction::create([
+            'user_id'     => $request->user()->id,
+            'type'        => 'expense',
+            'description' => $request->note ?? "Added to goal: {$goal->name}",
+            'amount'      => $request->amount,
+            'category'    => 'Savings',
+            'goal_id'     => $goal->id,
+            'date'        => $request->date,
+            'note'        => $request->note,
         ]);
 
         $goal->refresh();

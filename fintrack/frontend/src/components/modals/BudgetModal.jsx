@@ -5,16 +5,16 @@ import { useFinance } from '../../context/FinanceContext'
 import { useToast } from '../../context/ToastContext'
 import { EXPENSE_CATEGORIES } from '../../utils/categories'
 
-export default function BudgetModal({ open, onClose, existing }) {
+export default function BudgetModal({ open, onClose, existing, defaultMonth }) {
   const { addBudget, updateBudget } = useFinance()
   const { toast } = useToast()
-  const [form, setForm] = useState({ category: 'Food', limit_amount: '', month: new Date().toISOString().slice(0, 7) })
+  const [form, setForm] = useState({ category: 'Food', limit_amount: '', month: defaultMonth || new Date().toISOString().slice(0, 7) })
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (existing) setForm({ category: existing.category, limit_amount: existing.limit_amount, month: existing.month })
-    else setForm({ category: 'Food', limit_amount: '', month: new Date().toISOString().slice(0, 7) })
-  }, [existing, open])
+    else setForm({ category: 'Food', limit_amount: '', month: defaultMonth || new Date().toISOString().slice(0, 7) })
+  }, [existing, open, defaultMonth])
 
   const handleSubmit = async (e) => {
     e.preventDefault()

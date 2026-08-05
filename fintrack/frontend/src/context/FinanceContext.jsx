@@ -28,10 +28,10 @@ export function FinanceProvider({ children }) {
     } catch (e) { console.error(e) }
   }, [])
 
-  const fetchBudgets = useCallback(async () => {
+  const fetchBudgets = useCallback(async (params = {}) => {
     setLoadingBudget(true)
     try {
-      const res = await api.get('/budgets')
+      const res = await api.get('/budgets', { params })
       setBudgets(res.data)
     } catch (e) { console.error(e) }
     finally { setLoadingBudget(false) }

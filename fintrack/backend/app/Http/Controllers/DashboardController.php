@@ -52,14 +52,16 @@ class DashboardController extends Controller
     {
         $userId = $request->user()->id;
 
-        // Last 6 months bar chart data
+        // Jan–Dec of the current year
+        $year = now()->year;
         $months = collect();
-        for ($i = 5; $i >= 0; $i--) {
-            $date = now()->subMonths($i);
+        for ($m = 1; $m <= 12; $m++) {
+            $date = now()->startOfYear()->addMonths($m - 1);
             $months->push([
-                'month'   => $date->format('M'),
-                'year'    => $date->year,
-                'mon'     => $date->month,
+                'month'    => $date->format('M'),
+                'year'     => $year,
+                'mon'      => $m,
+                'monthKey' => $date->format('Y-m'),
             ]);
         }
 
@@ -76,28 +78,50 @@ class DashboardController extends Controller
                 ->whereMonth('date', $m['mon'])
                 ->sum('amount');
 
+            $savings     = $income - $expense;
+            $savingsRate = $income > 0 ? round(($savings / $income) * 100) : 0;
+
+            $budgets      = Budget::where('user_id', $userId)->where('month', $m['monthKey'])->get();
+            $totalLimit   = $budgets->sum('limit_amount');
+            $totalSpent   = $budgets->sum('spent_amount');
+            $budgetPct    = $totalLimit > 0 ? round(($totalSpent / $totalLimit) * 100) : 0;
+            $budgetRemain = max($totalLimit - $totalSpent, 0);
+
+            // Expense-by-category breakdown for this specific month, so the
+            // "Spending by category" chart can show whichever month is selected.
+            $categories = Transaction::where('user_id', $userId)
+                ->where('type', 'expense')
+                ->whereYear('date', $m['year'])
+                ->whereMonth('date', $m['mon'])
+                ->select('category', DB::raw('SUM(amount) as value'))
+                ->groupBy('category')
+                ->orderByDesc('value')
+                ->limit(5)
+                ->get()
+                ->map(fn($r) => ['name' => $r->category, 'value' => (float) $r->value]);
+
             return [
-                'month'   => $m['month'],
-                'income'  => (float) $income,
-                'expense' => (float) $expense,
+                'month'            => $m['month'],
+                'year'             => $m['year'],
+                'monthKey'         => $m['monthKey'],
+                'income'           => (float) $income,
+                'expense'          => (float) $expense,
+                'savings'          => (float) $savings,
+                'savings_rate'     => $savingsRate,
+                'budget_used_pct'  => $budgetPct,
+                'budget_remaining' => (float) $budgetRemain,
+                'budgets'          => $budgets->map(fn($b) => [
+                    'id'            => $b->id,
+                    'category'      => $b->category,
+                    'limit_amount'  => (float) $b->limit_amount,
+                    'spent_amount'  => (float) $b->spent_amount,
+                ]),
+                'categories'       => $categories,
             ];
         });
 
-        // Pie chart - expense by category this month
-        $pie = Transaction::where('user_id', $userId)
-            ->where('type', 'expense')
-            ->whereYear('date', now()->year)
-            ->whereMonth('date', now()->month)
-            ->select('category', DB::raw('SUM(amount) as value'))
-            ->groupBy('category')
-            ->orderByDesc('value')
-            ->limit(5)
-            ->get()
-            ->map(fn($r) => ['name' => $r->category, 'value' => (float) $r->value]);
-
         return response()->json([
             'monthly' => $monthly,
-            'pie'     => $pie,
         ]);
     }
 }
